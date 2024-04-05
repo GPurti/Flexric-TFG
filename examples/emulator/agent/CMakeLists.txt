@@ -12,6 +12,7 @@ add_library(test_agent_obj OBJECT
   ../../../test/rnd/fill_rnd_data_rc.c                  
   ../../../test/rnd/fill_rnd_data_slice.c                  
   ../../../test/rnd/fill_rnd_data_e2_setup_req.c
+  ../../../test/rnd/fill_rnd_data_new.c
   ../../../src/util/time_now_us.c
   ../../../src/util/alg_ds/ds/assoc_container/assoc_ht_open_address.c
   ../../../src/util/alg_ds/ds/seq_container/seq_arr.c
@@ -24,6 +25,7 @@ add_library(test_agent_obj OBJECT
   sm_rlc.c
   sm_slice.c
   sm_tc.c
+  sm_new.c
       )
 
 target_compile_definitions(test_agent_obj PRIVATE ${E2AP_VERSION}  ${KPM_VERSION}  )

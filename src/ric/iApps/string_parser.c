@@ -28,6 +28,7 @@
 #include "ric/iApps/../../sm/mac_sm/ie/mac_data_ie.h"    // for mac_ue_stats...
 #include "ric/iApps/../../sm/pdcp_sm/ie/pdcp_data_ie.h"  // for pdcp_radio_b...
 #include "ric/iApps/../../sm/rlc_sm/ie/rlc_data_ie.h"    // for rlc_radio_be...
+#include "ric/iApps/../../sm/new_sm/ie/new_data_ie.h"
 #include "ric/iApps/../../sm/slice_sm/ie/slice_data_ie.h"
 //#include "ric/iApps/../../sm/kpm_sm_v03.00/ie/kpm_data_ie.h"
 
@@ -532,4 +533,25 @@ void to_string_kpm_measRecord(meas_record_lst_t const* measRecord, size_t idx, c
   }
 
   assert(rc < (int)out_len && "Not enough space in the char array to write all the data");
+}
+
+void to_string_new_rb(new_radio_bearer_stats_t* new, int64_t tstamp , char* out, size_t out_len)
+{
+  assert(new != NULL);
+  assert(out != NULL);
+  const size_t max = 1024;
+  assert(out_len >= max);
+ 
+  int const rc = snprintf(out, max, "new_stats: "
+        "tstamp=%ld,"
+        "data1=%lu,"
+        "data2=%lu,"
+        "data3=%lu"
+        "\n"
+        ,tstamp
+        ,new->data1
+        ,new->data2
+        ,new->data3
+        );
+  assert(rc < (int)max && "Not enough space in the char array to write all the data");
 }

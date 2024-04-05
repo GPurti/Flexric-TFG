@@ -32,6 +32,7 @@
 #include "../../sm/slice_sm/ie/slice_data_ie.h"
 #include "../../sm/gtp_sm/ie/gtp_data_ie.h"
 #include "../../sm/kpm_sm/kpm_data_ie_wrapper.h"
+#include "../../sm/new_sm/ie/new_data_ie.h"
 
 void to_string_mac_ue_stats(mac_ue_stats_impl_t* stats, int64_t tstamp, char* out, size_t out_len);
 
@@ -46,5 +47,7 @@ void to_string_gtp_ngu(gtp_ngu_t_stats_t const* gtp, int64_t tstamp, char* out, 
 void to_string_kpm_measRecord(meas_record_lst_t const* measRecord, size_t idx, char*out, size_t out_len);
 
 void to_string_kpm_labelInfo(label_info_lst_t const* labelInfo, size_t idx, char*out, size_t out_len);
+
+void to_string_new_rb(new_radio_bearer_stats_t* new, int64_t tstamp, char* out, size_t out_len);
 
 #endif

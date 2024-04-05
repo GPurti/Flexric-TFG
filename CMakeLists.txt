@@ -292,6 +292,11 @@ set(SM_ENCODING_GTP "PLAIN" CACHE STRING "The GTP SM encoding to use")
 set_property(CACHE SM_ENCODING_GTP PROPERTY STRINGS "PLAIN")
 message(STATUS "Selected GTP SM_ENCODING: ${SM_ENCODING_GTP}")
 
+# NEW Service Model
+set(SM_ENCODING_NEW "PLAIN" CACHE STRING "The NEW SM encoding to use")
+set_property(CACHE SM_ENCODING_NEW PROPERTY STRINGS "PLAIN" "ASN" "FLATBUFFERS")
+message(STATUS "Selected NEW SM_ENCODING: ${SM_ENCODING_NEW}")
+
 ########
 ### Flatbuffer 
 ########
@@ -340,6 +345,7 @@ install(TARGETS tc_sm DESTINATION ${CMAKE_INSTALL_LIBDIR}/flexric)
 install(TARGETS gtp_sm DESTINATION ${CMAKE_INSTALL_LIBDIR}/flexric)
 install(TARGETS kpm_sm DESTINATION ${CMAKE_INSTALL_LIBDIR}/flexric)
 install(TARGETS rc_sm DESTINATION ${CMAKE_INSTALL_LIBDIR}/flexric)
+install(TARGETS new_sm DESTINATION ${CMAKE_INSTALL_PREFIX}/flexric)
 
 ###
 # Install the configuration file

@@ -25,6 +25,7 @@
 #include "../../sm/mac_sm/ie/mac_data_ie.h"    // for mac_ind_msg_t
 #include "../../sm/pdcp_sm/ie/pdcp_data_ie.h"  // for pdcp_ind_msg_t
 #include "../../sm/rlc_sm/ie/rlc_data_ie.h"    // for rlc_ind_msg_t
+#include "../../sm/new_sm/ie/new_data_ie.h"
 #include "string_parser.h"                               // for to_string_ma..
 
 #include "../../util/time_now_us.h"
@@ -324,6 +325,27 @@ void print_kpm_stats(kpm_ind_data_t const* kpm)
 
 }
 
+static
+void print_new_stats(new_ind_msg_t const* new)
+{
+  assert(new != NULL);
+  pthread_once(&init_fp_once, init_fp);
+  assert(fp != NULL);
+
+  for(uint32_t i = 0; i < new->len; ++i){
+    char stats[1024] = {0};
+    to_string_new_rb(&new->rb[i], new->tstamp , stats , 1024);
+
+    int const rc = fputs(stats , fp);
+    // Edit: The C99 standard §7.19.1.3 states:
+    // The macros are [...]
+    // EOF which expands to an integer constant expression, 
+    // with type int and a negative value, that is returned by 
+    // several functions to indicate end-of-ﬁle, that is, no more input from a stream;
+    assert(rc > -1);
+  }
+}
+
 void notify_stdout_listener(sm_ag_if_rd_ind_t const* data)
 {
   assert(data != NULL);
@@ -337,6 +359,8 @@ void notify_stdout_listener(sm_ag_if_rd_ind_t const* data)
     print_slice_stats(&data->slice.msg);
   else if (data->type == GTP_STATS_V0)
     print_gtp_stats(&data->gtp.msg);
+  else if (data->type == NEW_STATS_V0)
+    print_new_stats(&data->new_ind.msg);
   else if (data->type == TC_STATS_V0){
     // assert(0!=0 && "Not implemented");
     //print_tc_stats(&data->gtp.msg);

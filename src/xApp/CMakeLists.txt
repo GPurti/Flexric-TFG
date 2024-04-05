@@ -88,7 +88,7 @@ set(XAPP_SRC
   ../sm/slice_sm/ie/slice_data_ie.c
   ../sm/tc_sm/ie/tc_data_ie.c
   ../sm/gtp_sm/ie/gtp_data_ie.c
-
+  ../sm/new_sm/ie/new_data_ie.c
   )
 
 if(E2AP_ENCODING STREQUAL "ASN")

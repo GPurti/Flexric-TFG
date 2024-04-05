@@ -28,6 +28,7 @@
 #include "../../tc_sm/ie/tc_data_ie.h"
 #include "../../gtp_sm/ie/gtp_data_ie.h"
 #include "../../kpm_sm/kpm_data_ie_wrapper.h"
+#include "../../new_sm/ie/new_data_ie.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -52,7 +53,9 @@ void free_sm_ag_if_rd_ind(sm_ag_if_rd_ind_t* d)
     free_kpm_ind_data(&d->kpm.ind);
   } else if(d->type == RAN_CTRL_STATS_V1_03 ){
     free_rc_ind_data(&d->rc.ind);
-  } else {
+  } else if(d->type == NEW_STATS_V0) {
+    free_new_ind_data(&d->new_ind);
+  }  else {
     assert(0!=0 && "Unforeseen case");
   }
 
@@ -91,6 +94,8 @@ sm_ag_if_rd_ind_t cp_sm_ag_if_rd_ind(sm_ag_if_rd_ind_t const* d)
       *tmp = cp_e2sm_rc_action_def(d->rc.act_def);
       ans.rc.act_def = tmp;
     }
+  } else if(ans.type == NEW_STATS_V0){
+    ans.new_ind = cp_new_ind_data(&d->new_ind);
   } else {
     assert("Unknown type or not implemented");
   }

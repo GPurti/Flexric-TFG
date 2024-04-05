@@ -150,6 +150,14 @@ bool read_ind_rc(void* ind)
   return true;
 }
 
+bool read_ind_new(void* ind)
+{
+  assert(ind != NULL);
+  new_ind_data_t* new = (new_ind_data_t*)ind;
+  fill_new_ind_data(new);
+  return true;
+}
+
 static
 sm_ag_if_ans_t write_ctrl_slice(void const* data)
 {
@@ -373,6 +381,7 @@ sm_io_ag_ran_t init_sm_io_ag_ran(void)
   dst.read_ind_tbl[GTP_STATS_V0] =   read_ind_gtp;
   dst.read_ind_tbl[KPM_STATS_V3_0] =   read_ind_kpm;
   dst.read_ind_tbl[RAN_CTRL_STATS_V1_03] = read_ind_rc;
+  dst.read_ind_tbl[NEW_STATS_V0] = read_ind_new;
 
   //  READ: E2 Setup
   dst.read_setup_tbl[KPM_V3_0_AGENT_IF_E2_SETUP_ANS_V0] = read_e2_setup_kpm;

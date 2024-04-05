@@ -312,6 +312,29 @@ void create_kpm_table(sqlite3* db)
 }
 
 static
+void create_new_bearer_table(sqlite3* db)
+{
+  assert(db != NULL);
+
+  // ToDo: PRIMARY KEY UNIQUE
+  char* sql_new = "DROP TABLE IF EXISTS NEW_bearer;"
+                  "CREATE TABLE NEW_bearer("\
+                  "tstamp INT CHECK(tstamp > 0),"\
+                  "ngran_node INT CHECK(ngran_node >= 0 AND ngran_node < 9),"\
+                  "mcc INT,"\
+                  "mnc INT,"\
+                  "mnc_digit_len INT,"\
+                  "nb_id INT,"\
+                  "cu_du_id TEXT,"\
+                  "data1,"\
+                  "data2,"\
+                  "data3"
+                  ");";
+
+  create_table(db, sql_new);
+}
+
+static
 void insert_db(sqlite3* db, char const* sql)
 {
   assert(db != NULL);
@@ -1026,6 +1049,35 @@ int to_sql_string_gtp_NGUT(global_e2_node_id_t const* id,gtp_ngu_t_stats_t* gtp,
 // }
 
 static
+int to_sql_string_new_rb(global_e2_node_id_t const* id,new_radio_bearer_stats_t* new, int64_t tstamp, char* out, size_t out_len)
+{
+  assert(new != NULL);
+  assert(out != NULL);
+  const size_t max = 1024;
+  assert(out_len >= max);
+
+  int const rc = snprintf(out, max,
+        "INSERT INTO NEW_bearer VALUES(" 
+        "%ld,"   // tstamp
+        "%d,"    // ngran_node
+        "%d,"    // mcc
+        "%d,"    // mnc
+        "%d,"    // mnc_digit_len
+        "%d,"    // nb_id
+        "'%s',"  // cu_du_id
+        "%d,"    // data1
+        "%d,"    // data2
+        "%d"     // data3
+        ");"
+        , tstamp, id->type, id->plmn.mcc, id->plmn.mnc, id->plmn.mnc_digit_len, id->nb_id.nb_id
+        , id->cu_du_id 
+        , new->data1, new->data2, new->data3
+        );
+  assert(rc < (int)max && "Not enough space in the char array to write all the data");
+  return rc;
+}
+
+static
 void write_mac_stats(sqlite3* db, global_e2_node_id_t const* id, mac_ind_data_t const* ind )
 {
   assert(db != NULL);
@@ -1180,6 +1232,25 @@ void write_gtp_stats(sqlite3* db, global_e2_node_id_t const* id, gtp_ind_data_t 
 //   }
 // }
 
+static
+void write_new_stats(sqlite3* db, global_e2_node_id_t const* id, new_ind_data_t const* ind)
+{
+  assert(db != NULL);
+  assert(ind != NULL);
+
+  new_ind_msg_t const* ind_msg_new = &ind->msg; 
+
+  char buffer[2048] = {0};
+  int pos = 0;
+
+  for(size_t i = 0; i < ind_msg_new->len; ++i){
+    pos += to_sql_string_new_rb(id, &ind_msg_new->rb[i], ind_msg_new->tstamp, buffer + pos, 2048 - pos);
+  }
+
+  insert_db(db, buffer);
+
+}
+
 void init_db_sqlite3(sqlite3** db, char const* db_filename)
 {
   assert(db != NULL);
@@ -1226,6 +1297,10 @@ void init_db_sqlite3(sqlite3** db, char const* db_filename)
   // KPM
   ////
   create_kpm_table(*db);
+
+  // NEW
+  create_new_bearer_table(*db);
+
 }
 
 void close_db_sqlite3(sqlite3* db)
@@ -1251,7 +1326,7 @@ void write_db_sqlite3(sqlite3* db, global_e2_node_id_t const* id, sm_ag_if_rd_t 
   assert(rd->type == MAC_STATS_V0   || rd->type == RLC_STATS_V0 
       || rd->type == PDCP_STATS_V0  || rd->type == SLICE_STATS_V0 
       || rd->type == KPM_STATS_V3_0 || rd->type == GTP_STATS_V0
-      || rd->type == RAN_CTRL_STATS_V1_03);
+      || rd->type == RAN_CTRL_STATS_V1_03 || rd->type == NEW_STATS_V0);
 
   if(rd->type == MAC_STATS_V0){
     write_mac_stats(db, id, &rd->mac);
@@ -1275,6 +1350,8 @@ void write_db_sqlite3(sqlite3* db, global_e2_node_id_t const* id, sm_ag_if_rd_t 
       printf("RAN Control sqlite not implemented\n"); 
       rc_acc = 0;
     }
+  } else if (rd->type == NEW_STATS_V0) {
+    write_new_stats(db, id, &rd->new_ind);
   } else {
     assert(0!=0 && "Unknown statistics type received ");
   }
