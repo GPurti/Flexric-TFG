@@ -49,7 +49,7 @@ const char SM_NEW_SHORT_NAME[] = "E2SM-NEW";
 // IEs (0)
 
 __attribute__((unused)) static
-const char SM_NEW_OID[] = "0.0.0.0.0.0.0.0.1.143.0"; 
+const char SM_NEW_OID[] = "0.0.0.0.0.0.0.0.1.149.0"; 
 
 __attribute__((unused)) static
 const char SM_NEW_DESCRIPTION[] = "NEW Service Model";
