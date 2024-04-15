@@ -345,7 +345,7 @@ install(TARGETS tc_sm DESTINATION ${CMAKE_INSTALL_LIBDIR}/flexric)
 install(TARGETS gtp_sm DESTINATION ${CMAKE_INSTALL_LIBDIR}/flexric)
 install(TARGETS kpm_sm DESTINATION ${CMAKE_INSTALL_LIBDIR}/flexric)
 install(TARGETS rc_sm DESTINATION ${CMAKE_INSTALL_LIBDIR}/flexric)
-install(TARGETS new_sm DESTINATION ${CMAKE_INSTALL_PREFIX}/flexric)
+install(TARGETS new_sm DESTINATION ${CMAKE_INSTALL_LIBDIR}/flexric)
 
 ###
 # Install the configuration file
