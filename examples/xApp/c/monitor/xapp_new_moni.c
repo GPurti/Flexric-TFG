@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
   // Get the state of connection E2 nodes
   e2_node_arr_xapp_t nodes = e2_nodes_xapp_api();
-  defer({ free_e2_node_arr(&nodes); });
+  defer({ free_e2_node_arr_xapp(&nodes); });
 
   assert(nodes.len > 0);
 
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     for (size_t j = 0; j < n->len_rf; j++)
       printf("Registered node %d ran func id = %d \n ", i, n->rf[j].id);
     // generate subscription request
-    new_handle[i] = report_sm_xapp_api(&nodes.n[i].id, 149, i_3, sm_cb_new);
+    new_handle[i] = report_sm_xapp_api(&nodes.n[i].id, 149, (void*)i_3, sm_cb_new);
     assert(new_handle[i].success == true);
   }
 
