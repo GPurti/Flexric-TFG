@@ -326,9 +326,10 @@ void create_new_bearer_table(sqlite3* db)
                   "mnc_digit_len INT,"\
                   "nb_id INT,"\
                   "cu_du_id TEXT,"\
-                  "data1,"\
-                  "data2,"\
-                  "data3"
+                  "data1 INT,"\
+                  "data2 INT,"\
+                  "data3 INT,"\
+                  "data4 INT"
                   ");";
 
   create_table(db, sql_new);
@@ -1065,13 +1066,14 @@ int to_sql_string_new_rb(global_e2_node_id_t const* id,new_radio_bearer_stats_t*
         "%d,"    // mnc_digit_len
         "%d,"    // nb_id
         "'%s',"  // cu_du_id
-        "%d,"    // data1
-        "%d,"    // data2
-        "%d"     // data3
+        "%u,"    // data1
+        "%u,"    // data2
+        "%u,"    // data3
+        "%u"     // data4
         ");"
         , tstamp, id->type, id->plmn.mcc, id->plmn.mnc, id->plmn.mnc_digit_len, id->nb_id.nb_id
         , id->cu_du_id 
-        , new->data1, new->data2, new->data3
+        , new->data1, new->data2, new->data3, new->data4
         );
   assert(rc < (int)max && "Not enough space in the char array to write all the data");
   return rc;

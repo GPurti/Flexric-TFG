@@ -546,12 +546,14 @@ void to_string_new_rb(new_radio_bearer_stats_t* new, int64_t tstamp , char* out,
         "tstamp=%ld,"
         "data1=%lu,"
         "data2=%lu,"
-        "data3=%lu"
+        "data3=%lu,"
+        "data4=%lu"
         "\n"
         ,tstamp
         ,new->data1
         ,new->data2
         ,new->data3
+        ,new->data4
         );
   assert(rc < (int)max && "Not enough space in the char array to write all the data");
 }
