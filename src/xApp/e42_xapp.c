@@ -458,25 +458,31 @@ sm_ans_xapp_t report_sm_sync_xapp(e42_xapp_t* xapp, global_e2_node_id_t* id, uin
 static
 void send_ric_subscription_delete(e42_xapp_t* xapp, ric_gen_id_t ric_id)
 {
-  printf("Estic al principi del send_ric_subscription_delete");
+  printf("Estic al principi del send_ric_subscription_delete\n");
+  printf("xapp id: %d\n", xapp->id);
+  printf("handle_msg[E42_RIC_SUBSCRIPTION_DELETE_REQUEST]: %p\n", xapp->handle_msg[E42_RIC_SUBSCRIPTION_DELETE_REQUEST]); // Assuming it's a function pointer
   assert(xapp != NULL);
-  printf("Estic despres del xapp no null");
+  printf("Estic despres del xapp no null\n");
+    // Print ric_id from ric_gen_id_t
+  printf("ric_req_id: %u\n", ric_id.ric_req_id);
+  printf("ric_inst_id: %u\n", ric_id.ric_inst_id);
+  printf("ran_func_id: %u\n", ric_id.ran_func_id);
   assert(xapp->handle_msg[E42_RIC_SUBSCRIPTION_DELETE_REQUEST] != NULL);
-  printf("Estic despres del xapp handle msg no null");
+  printf("Estic despres del xapp handle msg no null\n");
   e2ap_msg_t msg = {.type = E42_RIC_SUBSCRIPTION_DELETE_REQUEST };
-  printf("Estic despres del e2ap_msg_t type");
+  printf("Estic despres del e2ap_msg_t type\n");
+  printf("msg type: %d\n", msg.type);
   msg.u_msgs.e42_ric_sub_del_req.sdr.ric_id = ric_id;
-  printf("Estic despres del e2ap_msg_t ric_id");
+  printf("Estic despres del e2ap_msg_t ric_id\n");
   msg.u_msgs.e42_ric_sub_del_req.xapp_id = xapp->id;
-  printf("Estic despres del e2ap_msg_t xapp id");
-
+  printf("Estic despres del e2ap_msg_t xapp id\n");
   xapp->handle_msg[E42_RIC_SUBSCRIPTION_DELETE_REQUEST](xapp, &msg );
-  printf("Estic al final del send_ric_subscription_delete");
+  printf("Estic al final del send_ric_subscription_delete\n");
 }
 
 void rm_report_sm_sync_xapp(e42_xapp_t* xapp, int ric_req_id)
 {
-  printf("Estic al principi del rm_report_sm_sync_xapp");
+  printf("Estic al principi del rm_report_sm_sync_xapp\n");
   assert(xapp != NULL);
   assert(ric_req_id  > -1 && ric_req_id < 1 << 16);
 
@@ -486,19 +492,19 @@ void rm_report_sm_sync_xapp(e42_xapp_t* xapp, int ric_req_id)
     assert(0!=0 && "ric_req_id not registered");
     exit(-1);
   }
-  printf("Estic abans del send_ric_subscription_delete");
+  printf("Estic abans del send_ric_subscription_delete\n");
   // Send message
   send_ric_subscription_delete(xapp, ans.val.id);
-  printf("Estic abans del cond_wait_sync_ui");
+  printf("Estic abans del cond_wait_sync_ui\n");
   // Wait for the answer (it will arrive in the event loop)
   cond_wait_sync_ui(&xapp->sync,xapp->sync.wait_ms);
 
   // Answer arrived
   //printf("[xApp]: Successfully received SUBSCRIPTION-DELETE-RESPONSE \n");
-  printf("Estic abans del rm_act_proc");
+  printf("Estic abans del rm_act_proc\n");
   // Remove the active procedure  
   rm_act_proc(&xapp->act_proc, ric_req_id ); 
-  printf("Estic al final del rm_report_sm_sync_xapp");
+  printf("Estic al final del rm_report_sm_sync_xapp\n");
 }
 
 static
