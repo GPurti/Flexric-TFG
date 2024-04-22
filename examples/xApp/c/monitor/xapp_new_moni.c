@@ -15,10 +15,13 @@ static
 void sm_cb_new(sm_ag_if_rd_t const* rd)
 {
   assert(rd != NULL);
+  assert(rd->type ==INDICATION_MSG_AGENT_IF_ANS_V0);
   assert(rd->ind.type == NEW_STATS_V0);
+  printf("Antes de time now us");
 
   int64_t now = time_now_us();
-
+  printf("Current time: %ld\n", now);
+  printf("Timestamp: %ld\n", rd->ind.new_ind.msg.tstamp);
   printf("NEW ind_msg latency = %ld \n", now - rd->ind.new_ind.msg.tstamp);
 }
 
@@ -47,6 +50,7 @@ int main(int argc, char *argv[])
   // if there is more than one E2 node connected to the RIC
   if(nodes.len > 0){
     // Create an array of with length of nodes
+    printf("Estic dins if de nodes");
     new_handle = calloc( nodes.len, sizeof(sm_ans_xapp_t));
     assert(new_handle != NULL);
   }
@@ -67,7 +71,7 @@ int main(int argc, char *argv[])
   for(int i = 0; i < nodes.len; ++i){
     // Remove the handle previously returned
     printf("Estic al xapp new just abans de rm_report_sm_xapp_api");
-    rm_report_sm_xapp_api(new_handle[i].u.handle);
+    rm_report_sm_xapp_api(new_handle[i].u.handle); //gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
     printf("Estic al xapp new just despres de rm_report_sm_xapp_api");
   }
 
