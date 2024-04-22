@@ -458,15 +458,20 @@ sm_ans_xapp_t report_sm_sync_xapp(e42_xapp_t* xapp, global_e2_node_id_t* id, uin
 static
 void send_ric_subscription_delete(e42_xapp_t* xapp, ric_gen_id_t ric_id)
 {
+  printf("Estic al principi del send_ric_subscription_delete");
   assert(xapp != NULL);
+  printf("Estic despres del xapp no null");
   assert(xapp->handle_msg[E42_RIC_SUBSCRIPTION_DELETE_REQUEST] != NULL);
-
+  printf("Estic despres del xapp handle msg no null");
   e2ap_msg_t msg = {.type = E42_RIC_SUBSCRIPTION_DELETE_REQUEST };
-
+  printf("Estic despres del e2ap_msg_t type");
   msg.u_msgs.e42_ric_sub_del_req.sdr.ric_id = ric_id;
+  printf("Estic despres del e2ap_msg_t ric_id");
   msg.u_msgs.e42_ric_sub_del_req.xapp_id = xapp->id;
+  printf("Estic despres del e2ap_msg_t xapp id");
 
   xapp->handle_msg[E42_RIC_SUBSCRIPTION_DELETE_REQUEST](xapp, &msg );
+  printf("Estic al final del send_ric_subscription_delete");
 }
 
 void rm_report_sm_sync_xapp(e42_xapp_t* xapp, int ric_req_id)
