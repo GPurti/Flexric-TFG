@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
     // generate subscription request
     new_handle[i] = report_sm_xapp_api(&nodes.n[i].id, 149, (void*)i_3, sm_cb_new);
     assert(new_handle[i].success == true);
+    printf("Estic al xapp new sortint de report_sm_xapp_api");
   }
 
   sleep(2);
@@ -65,11 +66,15 @@ int main(int argc, char *argv[])
 
   for(int i = 0; i < nodes.len; ++i){
     // Remove the handle previously returned
+    printf("Estic al xapp new just abans de rm_report_sm_xapp_api");
     rm_report_sm_xapp_api(new_handle[i].u.handle);
+    printf("Estic al xapp new just despres de rm_report_sm_xapp_api");
   }
 
   if(nodes.len > 0){
+    printf("Estic al xapp new just dins el if de nodes");
     free(new_handle);    
+    printf("Estic al xapp new just dins el if de nodes despres de free");
   }
 
   //Stop the xApp

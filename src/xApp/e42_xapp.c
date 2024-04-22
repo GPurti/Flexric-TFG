@@ -471,6 +471,7 @@ void send_ric_subscription_delete(e42_xapp_t* xapp, ric_gen_id_t ric_id)
 
 void rm_report_sm_sync_xapp(e42_xapp_t* xapp, int ric_req_id)
 {
+  printf("Estic al principi del rm_report_sm_sync_xapp");
   assert(xapp != NULL);
   assert(ric_req_id  > -1 && ric_req_id < 1 << 16);
 
@@ -480,18 +481,19 @@ void rm_report_sm_sync_xapp(e42_xapp_t* xapp, int ric_req_id)
     assert(0!=0 && "ric_req_id not registered");
     exit(-1);
   }
-
+  printf("Estic abans del send_ric_subscription_delete");
   // Send message
   send_ric_subscription_delete(xapp, ans.val.id);
-
+  printf("Estic abans del cond_wait_sync_ui");
   // Wait for the answer (it will arrive in the event loop)
   cond_wait_sync_ui(&xapp->sync,xapp->sync.wait_ms);
 
   // Answer arrived
   //printf("[xApp]: Successfully received SUBSCRIPTION-DELETE-RESPONSE \n");
-
+  printf("Estic abans del rm_act_proc");
   // Remove the active procedure  
   rm_act_proc(&xapp->act_proc, ric_req_id ); 
+  printf("Estic al final del rm_report_sm_sync_xapp");
 }
 
 static

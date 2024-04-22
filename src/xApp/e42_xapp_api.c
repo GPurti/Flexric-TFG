@@ -168,11 +168,13 @@ sm_ans_xapp_t report_sm_xapp_api(global_e2_node_id_t* id, uint32_t rf_id, void* 
 // remove the handle previously returned
 void rm_report_sm_xapp_api(int const handle)
 {
+  printf("Estic al principi del rm_report_sm_xapp_api");
   assert(xapp != NULL);
   assert(handle > -1);
 
   //printf("Remove handle number = %d \n", handle);
   rm_report_sm_sync_xapp(xapp, handle);
+  printf("Estic al final del rm_report_sm_xapp_api");
 }
 
 sm_ans_xapp_t control_sm_xapp_api(global_e2_node_id_t* id, uint32_t ran_func_id, void* wr)
