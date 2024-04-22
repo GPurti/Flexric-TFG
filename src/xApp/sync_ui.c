@@ -63,28 +63,31 @@ void free_sync_ui(sync_ui_t* s)
 
 void cond_wait_sync_ui(sync_ui_t* s, uint32_t wait_ms)
 {
+  printf("Estic al principi del cond_wait_sync_ui\n");
   assert(s != NULL);
   assert(wait_ms > 0);
-
+  printf("Estic abans del thread\n");
   pthread_mutex_lock(&s->mtx_sync);
 
   s->flag_sync = false;
   s->msg_ack = false;
   struct timespec ts = {0};
   int rc = clock_gettime(CLOCK_REALTIME, &ts);
+  printf("Estic despres gettime\n");
   assert(rc == 0);
   ts.tv_sec += wait_ms/1000 + 1;
 
   while(s->flag_sync == false && rc == 0) {
     rc = pthread_cond_timedwait(&s->cv_sync, &s->mtx_sync, &ts);
   }
-
+  printf("Estic despres while\n");
   assert(rc != ETIMEDOUT && "Timeout. No response from the E2 Node received, and neither from epoll. Unforeseen path");
   assert(rc == 0);
 
   pthread_mutex_unlock(&s->mtx_sync);
 
   assert(s->msg_ack == true && "No response to subscription from the RIC received\n" );
+  printf("Estic al final del cond_wait_sync_ui\n");
 }
 
 void signal_sync_ui(sync_ui_t* s)
