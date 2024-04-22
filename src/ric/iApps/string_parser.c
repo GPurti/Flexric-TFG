@@ -537,6 +537,7 @@ void to_string_kpm_measRecord(meas_record_lst_t const* measRecord, size_t idx, c
 
 void to_string_new_rb(new_radio_bearer_stats_t* new, int64_t tstamp , char* out, size_t out_len)
 {
+  printf("estic just abans de to string new");
   assert(new != NULL);
   assert(out != NULL);
   const size_t max = 1024;
@@ -556,4 +557,5 @@ void to_string_new_rb(new_radio_bearer_stats_t* new, int64_t tstamp , char* out,
         ,new->data4
         );
   assert(rc < (int)max && "Not enough space in the char array to write all the data");
+  printf("estic just despres de to string new");
 }

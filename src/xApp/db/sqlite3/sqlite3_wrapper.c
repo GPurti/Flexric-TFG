@@ -315,7 +315,7 @@ static
 void create_new_bearer_table(sqlite3* db)
 {
   assert(db != NULL);
-
+  printf("Estic just abans del create table new");
   // ToDo: PRIMARY KEY UNIQUE
   char* sql_new = "DROP TABLE IF EXISTS NEW_bearer;"
                   "CREATE TABLE NEW_bearer("\
@@ -333,6 +333,7 @@ void create_new_bearer_table(sqlite3* db)
                   ");";
 
   create_table(db, sql_new);
+  printf("He creat la taula new");
 }
 
 static
@@ -1056,6 +1057,7 @@ int to_sql_string_new_rb(global_e2_node_id_t const* id,new_radio_bearer_stats_t*
   assert(out != NULL);
   const size_t max = 1024;
   assert(out_len >= max);
+  printf("Estic abans insert into new rb osigui el to sql string new");
 
   int const rc = snprintf(out, max,
         "INSERT INTO NEW_bearer VALUES(" 
@@ -1066,16 +1068,17 @@ int to_sql_string_new_rb(global_e2_node_id_t const* id,new_radio_bearer_stats_t*
         "%d,"    // mnc_digit_len
         "%d,"    // nb_id
         "'%s',"  // cu_du_id
-        "%u,"    // data1
-        "%u,"    // data2
-        "%u,"    // data3
-        "%u"     // data4
+        "%lu,"    // data1
+        "%lu,"    // data2
+        "%lu,"    // data3
+        "%lu"     // data4
         ");"
         , tstamp, id->type, id->plmn.mcc, id->plmn.mnc, id->plmn.mnc_digit_len, id->nb_id.nb_id
         , id->cu_du_id 
         , new->data1, new->data2, new->data3, new->data4
         );
   assert(rc < (int)max && "Not enough space in the char array to write all the data");
+  printf("estic just despres del to sql string new");
   return rc;
 }
 
