@@ -136,19 +136,41 @@ void free_new_ind_msg(new_ind_msg_t* src)
   }
 }
 
+new_radio_bearer_stats_t cp_new_radio_bearer_stats_impl(new_radio_bearer_stats_t const* src)
+{
+  assert(src != NULL);
+
+  new_radio_bearer_stats_t dst = { .data1 = src->data1,
+                              .data2 = src->data2,
+                              .data3 = src->data3,
+                              .data4 = src->data4
+                            }; 
+
+  return dst;
+}
+
 new_ind_msg_t cp_new_ind_msg(new_ind_msg_t const* src)
 {
   assert(src != NULL);
 
-  new_ind_msg_t cp = {.len = src->len, .tstamp = src->tstamp}; 
+  //new_ind_msg_t cp = {.len = src->len, .tstamp = src->tstamp}; 
 
-  if(cp.len > 0){
-    cp.rb = calloc(cp.len, sizeof(new_radio_bearer_stats_t));
-    assert(cp.rb != NULL && "memory exhausted");
-    memcpy(cp.rb, src->rb, sizeof(new_radio_bearer_stats_t)*cp.len);
+  new_ind_msg_t dst = {0};
+
+  dst.len = src->len;
+  if(dst.len > 0){
+    dst.rb = calloc(dst.len, sizeof(new_radio_bearer_stats_t));
+    assert(dst.rb != NULL && "memory exhausted");
+    //memcpy(dst.rb, src->rb, sizeof(new_radio_bearer_stats_t)*dst.len);
   }
 
-  return cp;
+  for(size_t i = 0; i < dst.len; ++i){
+    dst.rb[i] = cp_new_radio_bearer_stats_impl(&src->rb[i]); 
+  }
+
+  dst.tstamp = src->tstamp; 
+
+  return dst;
 }
 
 bool eq_new_ind_msg(new_ind_msg_t* m0, new_ind_msg_t* m1)

@@ -199,7 +199,11 @@ void free_ind_data_new_sm_ric(void* msg)
 
   new_ind_data_t* ind = &rd_ind->new_ind;
   free_new_ind_hdr(&ind->hdr); 
-  free_new_ind_msg(&ind->msg); 
+  free_new_ind_msg(&ind->msg);
+  assert(ind->proc_id == NULL && "Not implemented");
+  if(ind->proc_id != NULL){
+    free_new_call_proc_id(ind->proc_id);
+  } 
 }
 
 static

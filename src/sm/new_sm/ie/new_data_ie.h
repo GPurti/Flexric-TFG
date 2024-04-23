@@ -92,6 +92,8 @@ typedef struct {
   uint64_t data4;
 } new_radio_bearer_stats_t;
 
+new_radio_bearer_stats_t cp_new_radio_bearer_stats_impl(new_radio_bearer_stats_t const* src);
+
 typedef struct {
   new_radio_bearer_stats_t* rb; 
   uint32_t len;
